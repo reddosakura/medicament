@@ -1,0 +1,10 @@
+spring:
+  config:
+    name: Medicament
+server:
+  port: 7999
+
+
+token:
+  signing:
+    key: 96412781eb036f4ceef009298a756969baf197f4d6e9b99287b671581b65da7b
