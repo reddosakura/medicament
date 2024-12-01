@@ -94,34 +94,69 @@
 
 <body class="d-flex flex-column align-items-stretch align-content-stretch">
 <th:block th:insert="blocks/header"></th:block>
-<form class="d-flex flex-column gap-2" method="post" th:object="${doctor}" action="/employes/add">
-    <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Фамилия сотрудника<span class="text-danger">*</span></label>
-            <input class="form-control" type="text" required  name="lastname" th:field="*{lastname}" /></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя сотрудника<span class="text-danger">*</span></label>
-            <input class="form-control" type="text" name="name" required th:field="*{name}" /></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Отчество сотрудника</label>
-            <input class="form-control" type="text" name="patronymic" th:field="*{patronymic}"/></div>
-    </div>
-    <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер телефона<span class="text-danger">*</span></label>
-            <input class="form-control" name="phone_number" type="text" required th:field="*{phone_number}" /></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Адрес электронной почты<span class="text-danger">*</span></label>
-            <input class="form-control" name="emaildoc" type="text" required th:field="*{emaildoc}" /></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Табельный номер<span class="text-danger">*</span></label>
-            <input class="form-control" name="tabelNumber" type="text" required th:field="*{tabelNumber}"/></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Должность<span class="text-danger">*</span></label>
-            <input class="form-control" name="speciality" type="text" required th:field="*{speciality}"/></div>
-        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label text-truncate align-items-stretch">Учетная запись<span class="text-danger">*</span></label>
-            <select class="form-select" id="usernames" name="account" th:field="*{account.id}">
-                <option th:each="user : ${users}" th:value="${user.id}"
-                        th:text="${user.username}"></option>
-            </select>
+<div class="d-flex justify-content-between flex-wrap p-2">
+    <div class="border rounded border-4 border-white shadow-lg d-flex flex-column flex-wrap">
+        <div class="align-items-stretch flex-wrap gap-3" style="padding: 1em;">
+            <form class="d-flex gap-3" method="post" action="/departments/add">
+                <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Название подразделения</label><input class="form-control" name="name" type="text" required=""></div>
+                <div class="d-flex justify-content-end align-items-end"><button class="btn btn-primary"  formmethod="post" type="submit">Добавить</button></div>
+            </form>
         </div>
+        <ul class="list-group" style="padding: 1em;">
+            <th:block th:each="dep : ${departments}">
+                <li class="list-group-item d-flex  gap-2 justify-content-between">
+<!--                    <span th:text="${dep.name}" class="d-lg-flex justify-content-lg-center align-items-lg-center" style="text-align: center;"></span>-->
+                    <form method="post" class="d-flex gap-2" th:action="'/departments/update?id=' + ${dep.id}">
+                        <input name="name" class="form-control flex-fill flex-grow-2" th:value="${dep.name}" type="text">
+                        <div>
+                        <button class="btn btn-primary" type="submit"><svg class="bi bi-pencil" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path></svg>
+                        </button>
+                        </div>
+                    </form>
+                    <form method="post" th:action="'/departments/delete?id=' + ${dep.id}">
+                        <button class="btn btn-danger" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-trash3">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path></svg>
+                        </button>
+                    </form>
+                </li>
+            </th:block>
+        </ul>
     </div>
-    <div class="d-flex flex-column align-items-stretch p-3">
-        <button class="btn btn-primary" formmethod="post" type="submit">Создать</button></div>
-</form>
+    <form class="d-flex border rounded border-4 border-white flex-column gap-2 shadow-lg" method="post" th:object="${doctor}" action="/employes/add">
+        <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
+            <!--        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Фамилия сотрудника<span class="text-danger">*</span></label>-->
+            <!--            <input class="form-control" type="text" required  name="lastname" th:field="*{lastname}" /></div>-->
+            <!--        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя сотрудника<span class="text-danger">*</span></label>-->
+            <!--            <input class="form-control" type="text" name="name" required th:field="*{name}" /></div>-->
+            <!--        <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Отчество сотрудника</label>-->
+            <!--            <input class="form-control" type="text" name="patronymic" th:field="*{patronymic}"/></div>-->
+            <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label text-truncate align-items-stretch">Учетная запись<span class="text-danger">*</span></label>
+                <select class="form-select" id="usernames" name="account" th:field="*{account.id}">
+                    <option th:each="user : ${users}" th:value="${user.id}"
+                            th:text="${user.lastname} + ' ' + ${user.name[0].toUpperCase()} + '. ' + ${user.patronymic.length() > 0 ? user.patronymic[0].toUpperCase()  + '.' : ''} + ' - Учетная запись: ' + ${user.username}">></option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
+            <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Подразделение</label>
+                <select class="form-select" id="cabinets" name="cabinet" th:field="*{department.id}">
+                    <option th:each="dep : ${departments}" th:value="${dep.id}"
+                            th:text="${dep.name}"></option>
+                </select>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Табельный номер<span class="text-danger">*</span></label>
+                <input class="form-control" name="tabelNumber" type="text" required th:field="*{tabelNumber}"/></div>
+            <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Должность<span class="text-danger">*</span></label>
+                <input class="form-control" name="speciality" type="text" required th:field="*{speciality}"/></div>
+
+        </div>
+        <div class="d-flex flex-column align-items-stretch p-3">
+            <button class="btn btn-primary" formmethod="post" type="submit">Создать</button></div>
+    </form>
+
+</div>
+
 <h1 style="margin: .5em;">Сотрудники</h1>
     <div class="d-flex flex-column flex-grow-1 gap-3" style="padding: 1em;">
         <th:block th:each="empl : ${employees}">
@@ -130,7 +165,7 @@
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path>
                     </svg></span>
                     <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap gap-3">
-                        <p class="m-auto" th:text="${empl.lastname} + ' ' + ${empl.name} + ' ' + ${empl.patronymic}"></p>
+                        <p class="m-auto" th:text="${empl.account.lastname} + ' ' + ${empl.account.name} + ' ' + ${empl.account.patronymic}"></p>
                         <p class="m-auto" th:text="'№' + ${empl.tabelNumber}">№</p>
                         <p class="text-truncate m-auto" th:text="${empl.speciality}">Врач</p>
                     </div>

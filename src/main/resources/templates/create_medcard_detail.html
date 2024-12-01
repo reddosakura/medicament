@@ -96,28 +96,40 @@
 <th:block th:insert="blocks/header"></th:block>
     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center">
         <div class="border rounded border-5 border-white shadow-lg d-flex flex-column gap-3" style="padding: 1em;">
-            <div class="d-flex justify-content-between flex-wrap" style="width: 100%;"><span class="bs-icon-xl bs-icon-rounded bs-icon-primary text-bg-light border rounded border-1 d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-medical">
-                        <path d="M8.5 4.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L7 6l-.549.317a.5.5 0 1 0 .5.866l.549-.317V7.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L9 6l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"></path>
-                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"></path>
-                    </svg></span>
+            <div class="d-flex justify-content-between flex-wrap" style="width: 100%;"><span class="bs-icon-xl bs-icon-rounded bs-icon-primary text-bg-light border rounded border-1 d-flex justify-content-center align-items-center me-2 bs-icon"><svg class="bi bi-file-medical" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.5 4.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L7 6l-.549.317a.5.5 0 1 0 .5.866l.549-.317V7.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L9 6l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"></path>
+            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"></path>
+        </svg></span>
+                <h1 class="d-xl-flex flex-grow-1 justify-content-xl-end align-items-xl-center">Создание медицинской карты</h1>
             </div>
             <form method="post" th:object="${medcard}" action="/medcards/add">
-                <h3>Основная информация</h3>
+                <h3>Учетная запись в системе</h3>
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Фамилия пациента<span class="text-danger">*</span></label>
-                        <input name="lastname" th:field="*{lastname}" class="form-control" type="text" required=""></div>
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя пациента<span class="text-danger">*</span></label>
-                        <input name="name" th:field="*{name}" class="form-control" type="text" required=""></div>
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Отчество пациента</label>
-                        <input name="patronymic" th:field="*{patronymic}" class="form-control" type="text"></div>
+                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя пользователя</label>
+                        <select class="form-select" id="usernames" th:field="*{user_account}" name="user_account">
+                            <option th:each="user : ${users}" th:value="${user.id}"
+                                    th:text="${user.lastname} + ' ' + ${user.name[0].toUpperCase()} + '. ' + ${user.patronymic.length() > 0 ? user.patronymic[0].toUpperCase()  + '.' : ''} + ' - Учетная запись: ' + ${user.username}"></option>
+                        </select>
+                    </div>
                 </div>
+                <h3>Документы</h3>
+<!--                <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">-->
+<!--                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Фамилия пациента<span class="text-danger">*</span></label>-->
+<!--                        <input name="lastname" th:field="*{lastname}" class="form-control" type="text" required=""></div>-->
+<!--                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя пациента<span class="text-danger">*</span></label>-->
+<!--                        <input name="name" th:field="*{name}" class="form-control" type="text" required=""></div>-->
+<!--                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Отчество пациента</label>-->
+<!--                        <input name="patronymic" th:field="*{patronymic}" class="form-control" type="text"></div>-->
+<!--                </div>-->
+
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Серия паспорта<span class="text-danger">*</span></label>
-                        <input name="passport.series" th:field="*{passport.series}" class="form-control" type="number" required=""></div>
+                        <input name="passport.series" th:field="*{passport.series}" class="form-control" type="text" pattern="\d{4}" title="Серия должна быть 4хзначным числом" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер паспорта<span class="text-danger">*</span></label>
-                        <input name="passport.number" th:field="*{passport.number}" class="form-control" type="text" required=""></div>
+                        <input name="passport.number" th:field="*{passport.number}" pattern="\d{6}" title="Номер должен быть 6тизначным числом" class="form-control" type="text" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Гражданство<span class="text-danger">*</span></label>
-                        <input name="citizenship" th:field="*{citizenship}" class="form-control" type="text" required=""></div>
+                        <input th:value="'Россия'" id="citizenship" name="citizenship" disabled class="form-control" type="text" required="">
+                    </div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label text-truncate align-items-stretch">Тип прикрепления<span class="text-danger">*</span></label>
 
                         <select class="form-select" id="attach" name="attachment">
@@ -126,39 +138,30 @@
                         </select>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label text-truncate align-items-stretch">Номер полиса<span class="text-danger">*</span></label>
-                        <input name="snils" th:field="*{snils}" class="form-control" type="text" required=""></div>
+                        <input name="snils" th:field="*{snils}" class="form-control" type="text" pattern=".{10}" title="Снилс должен содержать 10 символов" required=""></div>
                 </div>
                 <h3>Физиологические данные</h3>
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Дата рождения</label>
-                        <input name="bith_date" th:field="*{bith_date}" class="form-control" type="date"></div>
+                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Дата рождения<span class="text-danger">*</span></label>
+                        <input name="bith_date" th:field="*{bith_date}" class="form-control" required type="date"></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Пол</label>
                         <select name="gender" th:field="*{gender}" class="form-select">
                             <option value="Мужской" selected="">Мужской</option>
                             <option value="Женский">Женский</option>
                         </select></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Рост (в сантиметрах)</label>
-                        <input name="height" th:field="*{height}" class="form-control" type="number"></div>
+                        <input name="height" th:field="*{height}" min="0" oninput="validity.valid||(value='');" class="form-control" type="number"></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Вес(в килограммах)</label>
-                        <input name="weight" th:field="*{weight}" class="form-control" type="number"></div>
+                        <input name="weight" th:field="*{weight}" min="0" oninput="validity.valid||(value='');" class="form-control" type="number"></div>
                 </div>
-                <h3>Контактная информация</h3>
-                <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Адрес электронной почты</label>
-                        <input name="emaildoc" th:field="*{emaildoc}" class="form-control" type="email"></div>
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер телефона</label>
-                        <input name="phone_number" th:field="*{phone_number}" class="form-control" type="text"></div>
-                </div>
-                <h3>Учетная запись в системе</h3>
-                <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя пользователя</label>
-                        <select class="form-select" id="usernames" th:field="*{user_account}" name="user_account">
-                            <option th:each="user : ${users}" th:value="${user.id}"
-                                    th:text="${user.username}"></option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-primary" formmethod="post" type="submit">Сохранить изменения</button>
+<!--                <h3>Контактная информация</h3>-->
+<!--                <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">-->
+<!--                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Адрес электронной почты</label>-->
+<!--                        <input name="emaildoc" th:field="*{emaildoc}" class="form-control" type="email"></div>-->
+<!--                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер телефона</label>-->
+<!--                        <input name="phone_number" th:field="*{phone_number}" class="form-control" type="text"></div>-->
+<!--                </div>-->
+                <button class="btn btn-primary" formmethod="post" type="submit">Создать медицинскую карту</button>
             </form>
         </div>
     </div>

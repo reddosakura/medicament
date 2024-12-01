@@ -98,6 +98,9 @@
         <div class="border rounded border-2 shadow-sm align-self-center" style="padding: 1em;">
             <form method="post" th:object="${user}" action="/admin/users/update">
                 <input type="hidden" name="id"  th:value="${user.id}">
+                <input type="hidden" name="lastname"  th:value="${user.lastname}">
+                <input type="hidden" name="name"  th:value="${user.name}">
+                <input type="hidden" name="patronymic"  th:value="${user.patronymic}">
                 <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Имя пользователя</label>
                     <input class="form-control" type="text" name="username" th:field="*{username}" th:value="${user.username}">
                 </div>

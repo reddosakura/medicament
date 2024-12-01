@@ -94,31 +94,22 @@
 
 <body class="d-flex flex-column align-items-stretch align-content-stretch" style="width: 100vw;height: 100vh;">
 <th:block th:insert="blocks/header"></th:block>
-    <div class="d-flex flex-grow-1">
-        <div class="d-flex flex-column flex-grow-1" style="padding: 1em;">
-            <div class="border rounded border-2 shadow-sm" style="padding: 1em;margin: 2em;">
-                <form class="d-flex flex-column gap-2" th:object="${empl}" th:action="'/employes/update?id=' + ${empl.id}" method="post">
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Фамилия сотрудника</label>
-                        <input th:field="*{account.lastname}" class="form-control" type="text" required=""></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Имя сотрудника</label>
-                        <input th:field="*{account.name}" class="form-control" type="text" required=""></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Отчество сотрудника</label>
-                        <input th:field="*{account.patronymic}" class="form-control" type="text"></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Номер телефона</label>
-                        <input th:field="*{account.phone_number}" class="form-control" type="text"></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Адрес электронной почты</label>
-                        <input th:field="*{account.email}" class="form-control" type="text"></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Табельный номер</label>
-                        <input th:field="*{tabelNumber}" class="form-control" type="text"></div>
-                    <div class="d-flex flex-column align-items-stretch"><label class="form-label align-items-stretch">Должность</label>
-                        <input th:field="*{speciality}" class="form-control" type="text"></div>
-                    <input type="hidden" th:field="*{account.id}" th:value="${empl.account.id}">
-                    <div class="d-flex flex-column align-items-stretch"><button class="btn btn-primary" type="submit">Сохранить изменения</button></div>
-                </form>
-                <form method="post" style="margin-top: 1em;"><button class="btn btn-danger" type="submit">Удалить</button></form>
-            </div>
-        </div>
+<div class="d-flex flex-row gap-3" style="padding: 1em;">
+    <div class="d-flex flex-column flex-grow-1">
+        <form name="version_list" action="/admin/users/restore" method="post" onsubmit="return confirm('Вы уверены, что откатиться к данной версии? Действие нельзя отменить')">
+            <h1>Список созданных версий базы данных</h1>
+            <th:block th:each="dir : ${directories}">
+                <div class="form-check"><input id="formCheck-1" class="form-check-input" name="versions" th:value="${dir}" type="radio" /><th:p class="form-check-label" th:text="${dir}"></th:p></div>
+            </th:block>
+            <button class="btn btn-primary" type="submit">Восстановится из выбранной версии</button>
+        </form>
     </div>
+    <div class="d-flex flex-grow-1">
+        <form class="d-flex flex-fill align-items-lg-end" action="/admin/users/backup" method="post">
+            <button class="btn btn-primary d-lg-flex justify-content-lg-center align-items-lg-end" type="submit">Создать резервную копию</button>
+        </form>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/bs-init.js}"></script>
 </body>

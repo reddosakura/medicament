@@ -25,7 +25,9 @@ public class CustomErrorController extends AbstractErrorController {
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, HttpServletResponse response, Model model) {
         ServletWebRequest servletWebRequest = new ServletWebRequest(request);
-        System.out.println();
+        if (errorAttributes.getError(servletWebRequest) instanceof NullPointerException) {
+            return "medical_card_notfound";
+        }
         model.addAttribute("exception", Arrays.toString(errorAttributes.getError(servletWebRequest).getStackTrace()).replace(", ", "\n"));
         model.addAttribute("message", errorAttributes.getError(servletWebRequest).getMessage());
         model.addAttribute("statusCode", response.getStatus());

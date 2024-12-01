@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.SplittableRandom;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,41 @@ public class AdminService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
+
+
+    public List<UserDTO> filterUsers(String token, String role) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/users/filter?role=" + role)
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public List<UserDTO> sortUsersDESC(String token) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/users/sort/desc")
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public List<UserDTO> sortUsersASC(String token) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/users/sort/asc")
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
 
     public UserDTO getUser(String token, String username) {
         RestClient restClient = RestClient.builder().build();

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Medicine</title>
+
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/css/Navbar-Right-Links-icons.css}">
+    <link rel="stylesheet" th:href="@{/css/Overlay-Login-Form.css}">
+</head>
+
+<body class="d-flex flex-column" style="width: 100vw;height: 100vh;">
+<th:block th:insert="blocks/header"></th:block>
+    <div class="container m-auto">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="m-0">
+                    <canvas id="myChart" ></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex">
+                <div class="border rounded d-flex flex-column flex-grow-1">
+                    <h5 class="d-xxl-flex justify-content-xxl-center align-items-xxl-center m-2">Оцените свое самочувствие</h5>
+                    <form class="flex-grow-1" method="post" action="/wellbeing/add">
+                        <div class="d-flex flex-column flex-grow-1 p-3 gap-3">
+                            <div class="d-flex flex-row"><span>Ваша оценка:</span><input name="grade" class="form-range ms-3" type="range" id="grade" min="0" max="10" step="1" required="" value="5" oninput="document.getElementById(&#39;rangeval&#39;).innerText = document.getElementById(&#39;grade&#39;).value" style="width: 50%;"><span id="rangeval" class="ms-3">5</span></div>
+                            <div><label class="form-label">Описание состояния:</label><textarea name="description" class="form-control form-control-lg" spellcheck="true" rows="5"></textarea></div>
+                            <input type="hidden" id="patient.id" name="patient.id" th:value="${patient}">
+                            <input class="btn btn-primary" type="submit" value="Сохранить">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/chart.min.js}"></script>
+    <script th:src="@{/js/bs-init.js}"></script>
+
+<script>
+    // Get the data from Thymeleaf
+    var chartData = "[[${grades}]]"; // This will be replaced by Thymeleaf
+    var chartLabels = '[(${dates})]'; // This will be replaced by Thymeleaf
+    var chartDescriptions = '[(${desc})]';
+
+    // Parse the data into a JavaScript array
+    chartData = JSON.parse(chartData);
+    chartLabels = JSON.parse(chartLabels);
+    chartDescriptions = JSON.parse(chartDescriptions);
+
+    // Set up the chart
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: "line", // or 'line', 'pie', etc.
+        data: {
+            labels: chartLabels,
+// Example labels
+            datasets: [{
+                data: chartData,
+                backgroundColor: "rgb(13,110,253)",
+                borderColor: "rgb(13,110,253)",
+                borderWidth: 1,
+                fill: false,
+                tension: 0.1,
+            }]
+        },
+        options: {
+            animations: {
+                tension: {
+                    duration: 1000,
+                    easing: 'linear',
+                    from: 1,
+                    to: 0,
+                    loop: true
+                }
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        const value = chartDescriptions[tooltipItem.index];
+                        return 'Описание состояния: ' + value;
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 10,
+                    beginAtZero: true
+                }
+            },
+            legend: {
+                display: false // Hides the legend
+            },
+            title: {
+                display: true, // Set to true to display the title
+                text: 'Ваше самочувствие по дням', // The title text
+                fontSize: 20,
+                fontStyle:"normal"
+                // padding: {
+                //     top: 10, // Optional: Set padding above the title
+                //     bottom: 30 // Optional: Set padding below the title
+                // }
+            },
+
+        }
+    });
+</script>
+</body>
+
+
+
+</html>

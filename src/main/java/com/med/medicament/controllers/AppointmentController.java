@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
@@ -71,6 +68,15 @@ public class AppointmentController {
                              HttpServletRequest request) {
         String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
         appointService.addAppoint(token, appoint);
+        return "redirect:/appoints/all";
+    }
+
+    @PostMapping("/delete")
+    public String deleteAppoint(@RequestParam UUID id,
+                                HttpServletRequest request) {
+        String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
+        System.out.println("delete appoint");
+        appointService.deleteAppoint(token, id);
         return "redirect:/appoints/all";
     }
 }

@@ -4,6 +4,7 @@ package com.med.medicament.controllers;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,17 +27,21 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHome(HttpServletRequest request) {
-        String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
-        List<String> roles = (List<String>) Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
-                .getBody().get("role");
+        Cookie cookie = WebUtils.getCookie(request, "access_token");
+        if (cookie != null) {
+            String token = cookie.getValue();
+            List<String> roles = (List<String>) Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
+                    .getBody().get("role");
 
-        if (roles.contains("ADMIN")) {
-            return "redirect:/admin/users/all";
-        } else if (roles.contains("USER") || roles.contains("ADMIN")) {
-            return "redirect:/appoints/all";
-        } else if (roles.contains("DOCTOR") || roles.contains("ADMIN")) {
-            return "redirect:/medcards/all";
+            if (roles.contains("ADMIN")) {
+                return "redirect:/admin/users/all";
+            } else if (roles.contains("USER") || roles.contains("ADMIN")) {
+                return "redirect:/appoints/all";
+            } else if (roles.contains("DOCTOR") || roles.contains("ADMIN")) {
+                return "redirect:/medcards/all";
+            }
         }
-        return "redirect:/";
+
+        return "redirect:/login";
     }
 }

@@ -1,10 +1,9 @@
 package com.med.medicament.controllers;
 
 
-import com.med.medicament.model.CabinetDTO;
-import com.med.medicament.model.DoctorDTO;
-import com.med.medicament.service.AdminService;
-import com.med.medicament.service.CabinetService;
+import com.med.medicament.model.AppointmentDTO;
+import com.med.medicament.model.ServiceDTO;
+import com.med.medicament.service.ServeService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -21,16 +20,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("cabinets")
-public class CabinetController {
-    private final CabinetService cabinetService;
-    private final AdminService adminService;
+@RequestMapping("service")
+public class ServiceController {
+    private final ServeService serveService;
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
-    public CabinetController(CabinetService cabinetService, AdminService adminService) {
-        this.cabinetService = cabinetService;
-        this.adminService = adminService;
+    public ServiceController(ServeService serveService) {
+        this.serveService = serveService;
     }
 
     private Key getSigningKey() {
@@ -39,41 +36,43 @@ public class CabinetController {
     }
 
     @GetMapping("/all")
-    public String getAllCabinets(HttpServletRequest request, Model model) {
+    public String getAllService(HttpServletRequest request, Model model) {
         String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
-        model.addAttribute("cabinets", cabinetService.getAllCabinetss(token));
+        model.addAttribute("services", serveService.getAllServices(token));
         List<String> roles = (List<String>) Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
                 .getBody().get("role");
         model.addAttribute("roles", roles);
-        return "cabinets";
+        model.addAttribute("servicedto", new ServiceDTO());
+        return "service";
     }
-//
-//    @GetMapping("/create")
-//    public String createCabinet(HttpServletRequest request, Model model) {
-//        String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
-//
-//        model.addAttribute("users", adminService.getAllUsers(token));
-//        model.addAttribute("cabinet", new PatientCreateDTO());
-//
-//        return "cabinet";
-//    }
-//
-//
+
+
+    @PostMapping("/update")
+    public String updateService(@ModelAttribute("serve") ServiceDTO serviceDTO,
+                                @RequestParam UUID id,
+                                HttpServletRequest request) {
+        String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
+
+        serveService.updateService(token, serviceDTO, id);
+        return "redirect:/service/all";
+    }
+
+
     @PostMapping("/add")
-    public String addCabinet(@ModelAttribute("cabinet") CabinetDTO cabinet,
+    public String addService(@ModelAttribute("serve") ServiceDTO serve,
                              HttpServletRequest request) {
         String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
-        cabinetService.addCabinets(token, cabinet);
-        return "redirect:/cabinets/all";
+        serveService.addService(token, serve);
+        return "redirect:/service/all";
     }
 
 
     @PostMapping("/delete")
-    public String deleteCabinet(@RequestParam UUID id,
+    public String deleteService(@RequestParam UUID id,
                                 HttpServletRequest request) {
         String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
-        cabinetService.deleteCabinets(token, id);
-        return "redirect:/cabinets/all";
+        serveService.deleteService(token, id);
+        return "redirect:/service/all";
     }
 
 }

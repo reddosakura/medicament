@@ -110,11 +110,11 @@
                 <h3>Основная информация</h3>
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Фамилия пациента<span class="text-danger">*</span></label>
-                        <input name="lastname" th:field="*{lastname}" class="form-control" type="text" required=""></div>
+                        <input name="lastname" th:field="*{user_account.lastname}" class="form-control" type="text" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Имя пациента<span class="text-danger">*</span></label>
-                        <input name="name" th:field="*{name}" class="form-control" type="text" required=""></div>
+                        <input name="name" th:field="*{user_account.name}" class="form-control" type="text" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Отчество пациента</label>
-                        <input name="patronymic" th:field="*{patronymic}" class="form-control" type="text"></div>
+                        <input name="patronymic" th:field="*{user_account.patronymic}" class="form-control" type="text"></div>
                 </div>
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Серия паспорта<span class="text-danger">*</span></label>
@@ -122,7 +122,7 @@
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер паспорта<span class="text-danger">*</span></label>
                         <input name="passport.number" th:field="*{passport.number}" class="form-control" type="text" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Гражданство<span class="text-danger">*</span></label>
-                        <input name="citizenship" th:field="*{citizenship}" class="form-control" type="text" required=""></div>
+                        <input name="citizenship" id="citizenship" th:value="'Россия'" disabled class="form-control" type="text" required=""></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label text-truncate align-items-stretch">Тип прикрепления<span class="text-danger">*</span></label>
 
                         <select class="form-select" id="attach" name="attachment" th:field="*{attachment.id}">
@@ -143,19 +143,19 @@
                             <option value="Женский" th:selected="${medcard.gender == 'Женский'}">Женский</option>
                         </select></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Рост (в сантиметрах)</label>
-                        <input name="height" th:field="*{height}" class="form-control" type="number"></div>
+                        <input name="height" th:field="*{height}" min="0" oninput="validity.valid||(value='');" class="form-control" type="number"></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Вес(в килограммах)</label>
-                        <input name="weight" th:field="*{weight}" class="form-control" type="number"></div>
+                        <input name="weight" th:field="*{weight}" min="0" oninput="validity.valid||(value='');" class="form-control" type="number"></div>
                 </div>
                 <h3>Контактная информация</h3>
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Адрес электронной почты</label>
-                        <input name="emaildoc" th:field="*{emaildoc}" class="form-control" type="email"></div>
+                        <input name="emaildoc" th:field="*{user_account.email}" class="form-control" type="email"></div>
                     <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Номер телефона</label>
-                        <input name="phone_number" th:field="*{phone_number}" class="form-control" type="text"></div>
+                        <input name="phone_number" th:field="*{user_account.phone_number}" class="form-control" type="text"></div>
                 </div>
                 <input type="hidden" th:value="${medcard.user_account.id}" id="user_account" th:field="*{user_account.id}">
-                <button class="btn btn-primary" formmethod="post" type="submit">Сохранить изменения</button>
+                <button class="btn btn-primary m-auto" formmethod="post" type="submit">Сохранить изменения</button>
             </form>
         </div>
     </div>

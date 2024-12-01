@@ -1,10 +1,9 @@
 package com.med.medicament.service;
 
-//import com.med.medicament.model.AppointModel;
-//import com.med.medicament.repository.AppointRepository;
+//import com.med.medicament.model.ReferralsModel;
+//import com.med.medicament.repository.ReferralsRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
-import com.med.medicament.model.AppointmentDTO;
-import com.med.medicament.model.PatientCreateDTO;
+import com.med.medicament.model.ReferralDTO;
 import com.med.medicament.model.PatientDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -14,58 +13,56 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AppointService {
+public class ReferralService {
 
-    public List<AppointmentDTO> getAllAppoints(String token) {
+    public List<ReferralDTO> getAllReferrals(String token) {
         RestClient restClient = RestClient.builder().build();
 
         return restClient.get()
-                .uri("http://localhost:7979/appointments/all")
+                .uri("http://localhost:7979/referrals/all")
                 .header("Authorization", "Bearer " + token)
                 .header("Content-Type", "application/json")
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
-    public List<AppointmentDTO> getAppointsById(String token, String id) {
+    public PatientDTO getReferrals(String token, UUID id) {
         RestClient restClient = RestClient.builder().build();
 
         return restClient.get()
-                .uri("http://localhost:7979/appointments/all/" + id)
+                .uri("http://localhost:7979/referrals/all/" + id)
                 .header("Authorization", "Bearer " + token)
                 .header("Content-Type", "application/json")
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
-
-    public AppointmentDTO addAppoint(String token, AppointmentDTO store) {
+    public ReferralDTO addReferrals(String token, ReferralDTO store) {
         RestClient restClient = RestClient.builder().build();
         return restClient.post()
-                .uri("http://localhost:7979/appointments")
+                .uri("http://localhost:7979/referrals")
                 .header("Authorization", "Bearer " + token)
                 .header("Content-Type", "application/json")
                 .body(store)
                 .retrieve()
-                .body(AppointmentDTO.class);
+                .body(ReferralDTO.class);
     }
 
-//    public PatientDTO updateAppoint(String token, PatientDTO store, UUID id) {
-//        RestClient restClient = RestClient.builder().build();
-//        return restClient.put()
-//                .uri("http://localhost:7979/appointments/update?id=" + id)
-//                .header("Authorization", "Bearer " + token)
-//                .header("Content-Type", "application/json")
-//                .body(store)
-//                .retrieve()
-//                .body(PatientDTO.class);
-//    }
-//
-    public void deleteAppoint(String token, UUID id) {
+    public PatientDTO updateReferrals(String token, ReferralDTO store, UUID id) {
         RestClient restClient = RestClient.builder().build();
-        System.out.println("API REQUEST");
+        return restClient.put()
+                .uri("http://localhost:7979/referrals/update?id=" + id)
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .body(store)
+                .retrieve()
+                .body(PatientDTO.class);
+    }
+
+    public void deleteReferrals(String token, UUID id) {
+        RestClient restClient = RestClient.builder().build();
         restClient.delete()
-                .uri("http://localhost:7979/appointments/delete?id=" + id)
+                .uri("http://localhost:7979/referrals/delete?id=" + id)
                 .header("Authorization", "Bearer " + token)
                 .retrieve();
     }

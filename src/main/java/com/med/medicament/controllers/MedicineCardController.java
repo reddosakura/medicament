@@ -96,6 +96,7 @@ public class MedicineCardController {
 //        ArrayList<BulbsIdDTO> bulbs = card.getBulbs();
 //        card.setBulbs(bulbs);
 //        card.setUser_account(adminService.getUser(token, card.getUser_account().username));
+
 //        card.setAttachment(attachService.getAttach(token, card.getAttachment().id));
         cardService.updateCard(token, card, id);
         return "redirect:/medcards/all";

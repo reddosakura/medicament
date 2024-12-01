@@ -4,6 +4,7 @@ package com.med.medicament.controllers;
 import com.med.medicament.model.*;
 import com.med.medicament.service.AdminService;
 import com.med.medicament.service.AttachService;
+import com.med.medicament.service.DepartmentService;
 import com.med.medicament.service.EmployeService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -25,11 +26,13 @@ import java.util.UUID;
 public class EmployeeController {
     private final EmployeService employeeService;
     private final AdminService adminService;
+    private final DepartmentService departmentService;
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
-    public EmployeeController(EmployeService employeeService, AdminService adminService) {
+    public EmployeeController(EmployeService employeeService, AdminService adminService, DepartmentService departmentService) {
         this.employeeService = employeeService;
+        this.departmentService = departmentService;
         this.adminService = adminService;
     }
 
@@ -43,6 +46,7 @@ public class EmployeeController {
         String token = Objects.requireNonNull(WebUtils.getCookie(request, "access_token")).getValue();
         model.addAttribute("employees", employeeService.getAllDoctors(token));
         model.addAttribute("users", adminService.getAllUsers(token));
+        model.addAttribute("departments", departmentService.getAllDepartments(token));
         List<String> roles = (List<String>) Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
                 .getBody().get("role");
         model.addAttribute("roles", roles);

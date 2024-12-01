@@ -98,33 +98,68 @@
     <h1 style="margin: .5em;">Медицинские карты</h1>
     <a class="btn btn-primary align-self-center" href="/medcards/create" role="button" style="margin: 1em;">Добавить карту</a>
 </div>
+<div class="d-flex gap-5 p-3">
+    <form class="flex-grow-1" style="width: 60%;" method="post" action="/admin/users/search">
+        <div class="d-flex gap-3">
+            <input class="form-control flex-grow-1" id="username" name="username" type="text">
+            <button class="btn btn-primary flex-grow-1" type="button" style="width: 10%;">Поиск</button></div>
+    </form>
+</div>
+    <div class="d-flex">
+        <div class="d-flex flex-column gap-3 m-3">
 
-    <div class="d-flex flex-fill justify-content-center align-items-stretch flex-wrap gap-4" style="padding: 1em;">
-<th:block th:each="card : ${cards}">
-        <div class="border rounded border-1 shadow-sm d-flex flex-column justify-content-start align-items-center flex-wrap gap-3" data-bss-hover-animate="pulse" style="padding: 1em;max-height: 17em;">
-            <div class="d-flex flex-wrap" style="width: 100%;">
-<!--                <a  type="button">-->
-                <a th:href="'/medcards/update?id=' + ${card.id}" class="btn btn-primary bs-icon-xl bs-icon-rounded bs-icon-primary text-bg-light border rounded border-1 d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-medical">
-                        <path d="M8.5 4.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L7 6l-.549.317a.5.5 0 1 0 .5.866l.549-.317V7.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L9 6l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"></path>
-                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"></path>
-                    </svg>
-                </a>
-<!--                </a>-->
-                <div class="border rounded border-1 d-flex flex-column justify-content-center" style="padding: .75em;">
-                    <p style="margin-bottom: 0;">Номер карты:</p>
-                    <p class="text-truncate" th:text="${card.id}" style="margin-bottom: 0;"></p>
+            <h6>Сортировка</h6>
+            <div class="d-flex gap-3">
+                <form method="get" action="/admin/users/sort/desc">
+                    <button class="btn btn-primary" type="submit">От старших к младшим</button>
+                </form>
+                <form method="get" action="/admin/users/sort/asc">
+                    <button class="btn btn-primary" type="submit">От младших к старшим</button>
+                </form>
+            </div>
+
+            <form method="post" action="/admin/users/filter">
+                <div class="d-flex flex-column gap-3">
+                    <div><label for="role_filter" class="form-label">Фильтровать по типу прикрепления:</label>
+                        <select id="role_filter" name="role_filter" class="form-select">
+                            <optgroup label="Выберите тип">
+                                <option value="ОМС">ОМС</option>
+                                <option value="ДМС">ДМС</option>
+                                <option value="Платная основа">Платная основа</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Применить</button>
                 </div>
-            </div>
-            <div style="text-align: center;width: 100%;">
-                <p class="m-auto" th:text="${card.lastname} + ' ' + ${card.name} + ' ' + ${card.patronymic}" style="font-size: 20px;font-weight: bold;"></p>
-                <p class="d-flex gap-2" style="margin-bottom: 0;">Дата рождения:<span th:text="${card.bith_date.toLocaleString()}" style="font-weight: bold;"></span></p>
-                <p class="d-flex gap-2" style="margin-bottom: 0;">Тип прикрепления:<span th:text="${card.attachment.type_name}" style="font-weight: bold;"></span></p>
-                <p class="d-flex gap-2" style="margin-bottom: 0;">Номер полиса:<span th:text="${card.snils}" style="font-weight: bold;"></span></p>
-                <p class="d-flex gap-2" style="margin-bottom: 0;">Пол:<span th:text="${card.gender}" style="font-weight: bold;">Мужской</span></p>
-            </div>
-<!--            <a class="btn btn-primary" th:href="'/medcards/update?id=' + ${card.id}" type="button">Детали карты</a>-->
+            </form>
         </div>
-</th:block>
+        <div class="d-flex flex-grow-1 justify-content-center align-items-stretch flex-wrap gap-4" style="padding: 1em;">
+    <th:block th:each="card : ${cards}">
+            <div class="border rounded border-1 shadow-sm d-flex flex-column justify-content-start align-items-center flex-wrap gap-3" data-bss-hover-animate="pulse" style="padding: 1em;">
+                <div class="d-flex flex-wrap" style="width: 100%;">
+    <!--                <a  type="button">-->
+                    <a th:href="'/medcards/update?id=' + ${card.id}" class="btn btn-primary bs-icon-xl bs-icon-rounded bs-icon-primary text-bg-light border rounded border-1 d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-medical">
+                            <path d="M8.5 4.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L7 6l-.549.317a.5.5 0 1 0 .5.866l.549-.317V7.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L9 6l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"></path>
+                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"></path>
+                        </svg>
+                    </a>
+    <!--                </a>-->
+                    <div class="border rounded border-1 d-flex flex-column justify-content-center" style="padding: .75em;">
+                        <p style="margin-bottom: 0;">Номер карты:</p>
+                        <p class="text-truncate" th:text="${card.id}" style="margin-bottom: 0;"></p>
+                    </div>
+                </div>
+                <div style="text-align: center;width: 100%;">
+                    <p class="m-auto" th:text="${card.user_account.lastname} + ' ' + ${card.user_account.name} + ' ' + ${card.user_account.patronymic}" style="font-size: 20px;font-weight: bold;"></p>
+                    <p class="d-flex gap-2" style="margin-bottom: 0;">Дата рождения:<span th:text="${card.bith_date.toLocaleString()}" style="font-weight: bold;"></span></p>
+                    <p class="d-flex gap-2" style="margin-bottom: 0;">Тип прикрепления:<span th:text="${card.attachment.type_name}" style="font-weight: bold;"></span></p>
+                    <p class="d-flex gap-2" style="margin-bottom: 0;">Номер полиса:<span th:text="${card.snils}" style="font-weight: bold;"></span></p>
+                    <p class="d-flex gap-2" style="margin-bottom: 0;">Пол:<span th:text="${card.gender}" style="font-weight: bold;">Мужской</span></p>
+                </div>
+    <!--            <a class="btn btn-primary" th:href="'/medcards/update?id=' + ${card.id}" type="button">Детали карты</a>-->
+            </div>
+    </th:block>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

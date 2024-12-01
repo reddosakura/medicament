@@ -99,16 +99,16 @@
             <h3>Запись к врачу</h3>
             <form method="post" th:object="${appointdto}" action="/appoints/add">
                 <div class="d-flex flex-row align-items-stretch flex-wrap gap-3" style="padding: 1em;">
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Дата записи</label>
-                        <input class="form-control" type="date" name="date" th:field="*{date}"></div>
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Доктор</label>
-                        <select class="form-select" id="doctors" name="doctor" th:field="*{doctor.id}">
+                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Дата записи<span class="text-danger">*</span></label>
+                        <input class="form-control" type="date" name="date" th:field="*{date}" required></div>
+                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Доктор<span class="text-danger">*</span></label>
+                        <select class="form-select" id="doctors" name="doctor" th:field="*{doctor.id}" required>
                             <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
-                                    th:text="${doctor.lastname} + ' ' + ${doctor.name} + ' ' + ${doctor.patronymic}"></option>
+                                    th:text="${doctor.account.lastname} + ' ' + ${doctor.account.name} + ' ' + ${doctor.account.patronymic}"></option>
                         </select>
                     </div>
-                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Кабинет</label>
-                        <select class="form-select" id="cabinets" name="cabinet" th:field="*{cabinet.id}">
+                    <div class="d-flex flex-column flex-grow-1 align-items-stretch"><label class="form-label align-items-stretch">Кабинет<span class="text-danger">*</span></label>
+                        <select class="form-select" id="cabinets" name="cabinet" th:field="*{cabinet.id}" required>
                             <option th:each="cab : ${cabinets}" th:value="${cab.id}"
                                     th:text="${cab.name}"></option>
                         </select>
@@ -118,9 +118,14 @@
                 </div>
             </form>
             <h3>История записей</h3>
-            <ul class="list-group">
+            <ul class="list-group d-flex flex-column gap-3">
                 <th:block th:each="appoint : ${appoints}">
-                    <li class="list-group-item"><span th:text="${appoint.date.toLocaleString()} + ' Кабинет: ' + ${appoint.cabinet.name} + ' Врач: ' + ${appoint.doctor.lastname}"></span></li>
+                    <form class="d-flex gap-3 justify-content-between" method="post" th:action="'/appoints/delete?id=' + ${appoint.id}">
+                        <li class="list-group-item flex-grow-0 w-75"><span th:text="${appoint.date.toLocaleString()} + ' Кабинет: ' + ${appoint.cabinet.name} + ' Врач: ' + ${appoint.doctor.account.lastname}"></span></li>
+                        <button class="btn btn-danger flex-grow-0 w-25" formmethod="post" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-trash3">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+                        </svg></button>
+                    </form>
                 </th:block>
             </ul>
         </div>

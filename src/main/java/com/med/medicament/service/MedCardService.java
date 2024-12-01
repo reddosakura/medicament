@@ -79,4 +79,37 @@ public class MedCardService {
                 .retrieve();
     }
 
+    public PatientDTO findCardsByLastname(String token, String lastname) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/patients/search?keyword=" + lastname)
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public List<PatientDTO> sortCardsASC(String token) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/patients/sort/asc")
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public List<PatientDTO> sortCardsDESC(String token) {
+        RestClient restClient = RestClient.builder().build();
+
+        return restClient.get()
+                .uri("http://localhost:7979/patients/sort/desc")
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
 }
